@@ -21,7 +21,7 @@ const config = defineUserConfig<DefaultThemeOptions, ViteBundlerOptions>({
 		['meta', { property: 'og:type', content: 'website' }],
 		['meta', { property: 'og:url', content: 'https://guia.palta.ml/' }],
 		['meta', { property: 'og:locale', content: 'es_XL' }],
-		['meta', { property: 'og:image', content: '/meta-image.png' }],
+		['meta', { property: 'og:image', content: 'https://guia.palta.ml/metaimg.png' }],
 	],
 	theme: path.join(__dirname, 'theme', 'index.ts'),
 	themeConfig: {
