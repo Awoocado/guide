@@ -35,7 +35,7 @@ Discord usa una sintaxis especial para incrustar menciones en un mensaje. Para l
 Las menciones de roles y las menciones de canales funcionan de manera similar. Las menciones de roles se ven como `<@& 134362454976102401>` y las menciones de canales como `<#222197033908436994>`.
 
 Eso significa que cuando recibe un mensaje de la API de Discord y contiene menciones, el contenido del mensaje contendrá esa sintaxis especial.
-Si tu envías
+Si tu envías:
 
 <DiscordMessages>
 	<DiscordMessage profile="user">
@@ -43,7 +43,7 @@ Si tu envías
 	</DiscordMessage>
 </DiscordMessages>
 
-Entonces el `message.content` para ese mensaje se verá así
+Entonces el `message.content` para ese mensaje se verá así:
 
 <!-- eslint-skip -->
 ```js
@@ -67,7 +67,7 @@ client.on('messageCreate', message => {
 });
 ```
 
-Ahora puedes probar rápidamente las aguas actualizando el comando avata
+Ahora puedes probar rápidamente las aguas actualizando el comando avatar.
 Esto es lo que tenemos hasta ahora. Es bastante simple; mostrará el avatar de quién usó el comando.
 ```js {3-7}
 client.on('messageCreate', message => {
@@ -80,7 +80,7 @@ client.on('messageCreate', message => {
 });
 ```
 
-Pero, ¿cómo se obtiene el usuario correcto ahora? Bueno, esto require unos sencillos pasos. Ponerlo en una función lo hará fácilmente reutilizable. Usaremos el nombre `get User From Mention` aquí
+Pero, ¿cómo se obtiene el usuario correcto ahora? Bueno, esto require unos sencillos pasos. Ponerlo en una función lo hará fácilmente reutilizable. Usaremos el nombre `get User From Mention` aquí:
 ```js
 function getUserFromMention(mention) {
 	if (!mention) return;
@@ -105,7 +105,7 @@ Básicamente, solo funciona a través de la estructura de la mención poco a poc
 Siempre que encuentra un error con la mención (es decir, estructura no válida), simplemente devuelve "indefinido" para indicar que la mención no es válida.
 
 ::: tip
-El método `.slice ()` se usa aquí de una manera más avanzada. Puedes leer el [Documentación MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice) para más información
+El método `.slice ()` se usa aquí de una manera más avanzada. Puedes leer el [Documentación MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice) para más información.
 :::
 
 Ahora tiene una función ingeniosa que puede usar para convertir una mención sin formato en un objeto de usuario adecuado.
@@ -235,7 +235,7 @@ function getUserFromMention(mention) {
 ```
 
 Ves?? Eso es *mucho* más corto y no tan complicado.
-Si vuelves a ejecutar tu bot ahora, todo debería de funcionar igual
+Si vuelves a ejecutar tu bot ahora, todo debería de funcionar igual.
 
 ## Resultado del código
 
