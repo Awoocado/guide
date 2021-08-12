@@ -6,7 +6,7 @@
 
 Imagina una guía... que explora varias posibilidades para tu bot de [Discord.js](https://github.com/discordjs/discord.js).
 
-## About
+## Acerda de...
 
 Esta es una traducción no oficial de [Discord.js Guide](https://github.com/discordjs/guide) diseñado para el quién no sabe inglés.
 
