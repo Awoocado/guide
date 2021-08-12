@@ -1,63 +1,62 @@
-# Parsing mention arguments
+# Analizar argumentos de mención
 
-In a previous chapter, you learned how to build commands with user input; you also learned how to use *mentions* as user input.
-However, using `message.mentions` can lead to a few problems.  
-For example, you do not know which mention belongs to which argument.
-Or if you are splitting the message's content by spaces to get the args,
-The mentions will still take up space in your args array, messing up the rest of your args parsing if you are not careful.
+En un capítulo anterior, aprendimos a crear comandos con la entrada del usuario; También a usar *menciones* como entrada de usuario
+Sin embargo, el uso de `message.mentions` puede ocasionar algunos problemas.  
+Por ejemplo, no sabe qué mención pertenece a qué argumento.
+O si está dividiendo el contenido del mensaje por espacios para obtener los argumentos,
+Las menciones seguirán ocupando espacio en su matriz de argumentos, estropeando el resto del análisis de argumentos si no tienes cuidado.
 
-Say you are writing a bot for moderating your server. You will want a kick or a ban command, which allows you to mention the person you are trying to ban.
-But what happens if you try to use the command like this?
-
-<DiscordMessages>
-	<DiscordMessage profile="user">
-		!ban <DiscordMention>Offender</DiscordMention> Because they were rude to <DiscordMention>Victim</DiscordMention>.
-	</DiscordMessage>
-</DiscordMessages>
-
-You might expect it to ban @Offender because that is who you mentioned first.
-However, the Discord API does not send the mentions in the order they appear; They are sorted by their ID instead.
-
-If the @Victim happens to have joined Discord before @Offender and has a smaller ID, they might get banned instead.  
-Or maybe someone misuses a command, the bot might still accept it, but it will create an unexpected outcome.  
-Say someone accidentally used the ban command like this:
+Digamos que estás haciendo un bot para moderar su servidor. Querrás que el bot banee o warnee a la persona mencionada.
+Pero, ¿qué pasa si intentas usar el comando de esta manera?
 
 <DiscordMessages>
 	<DiscordMessage profile="user">
-		!ban Because they were rude to <DiscordMention>Victim</DiscordMention>.
+		!ban <DiscordMention>Offender</DiscordMention> Porque fueron groseros con <DiscordMention>Victim</DiscordMention>.
 	</DiscordMessage>
 </DiscordMessages>
+Obvio que has baneado a Offender por que es al que le has mencionado primero
+Sin embargo, la API de Discord no envía las menciones en el orden en que aparecen; En su lugar, están ordenados por su ID.
 
-The bot will still ban someone, but it will be the @Victim again. `message.mentions.users` still contains a mention, which the bot will use. But in reality, you would want your bot to be able to tell the user they misused the command.
-
-## How Discord mentions work
-
-Discord uses a special syntax to embed mentions in a message. For user mentions, it is the user's ID with `<@` at the start and `>` at the end, like this: `<@86890631690977280>`. If they have a nickname, there will also be a `!` after the `@`.  
-Role mentions and channel mentions work similarly. Role mentions look like `<@&134362454976102401>` and channel mentions like `<#222197033908436994>`.
-
-That means when you receive a message from the Discord API, and it contains mentions, the message's content will contain that special syntax.  
-If you send
+Si la @Victim se ha unido a Discord antes que @Offender y tiene una ID más pequeña, es posible que se le prohíba la prohibición.
+O tal vez alguien hace un mal uso de un comando, el bot aún puede aceptarlo, pero creará un resultado inesperado.
+Digamos que alguien usó accidentalmente el comando de prohibición de esta manera:
 
 <DiscordMessages>
 	<DiscordMessage profile="user">
-		I think we should add <DiscordMention>GoodPerson</DiscordMention> to the <DiscordMention type="role" role-color="#3eaf7c">Mod</DiscordMention> role.
+		!ban Por que fueron groseros con <DiscordMention>Victim</DiscordMention>.
 	</DiscordMessage>
 </DiscordMessages>
 
-then the `message.content` for that message will look something like this
+El bot todavía baneara a alguien, pero volverá a ser @Victim. `message.mentions.users` todavía contiene una mención, que el bot usará. Pero en realidad, querrás que tu bot pueda decirle al usuario que hizo un mal uso del comando.
+
+## Cómo funcionan las menciones de Discord
+
+Discord usa una sintaxis especial para incrustar menciones en un mensaje. Para las menciones del usuario, es la identificación del usuario con `<@` al principio y `>` al final, así: `<@86890631690977280>`. Si tienen un apodo, también habrá un `!` Después de la `@`.
+Las menciones de roles y las menciones de canales funcionan de manera similar. Las menciones de roles se ven como `<@& 134362454976102401>` y las menciones de canales como `<#222197033908436994>`.
+
+Eso significa que cuando recibe un mensaje de la API de Discord y contiene menciones, el contenido del mensaje contendrá esa sintaxis especial.
+Si tu envías
+
+<DiscordMessages>
+	<DiscordMessage profile="user">
+		Cre que deberíamos agregar <DiscordMention>BuenaPersona</DiscordMention> al <DiscordMention type="role" role-color="#3eaf7c">Moderador</DiscordMention> rol
+	</DiscordMessage>
+</DiscordMessages>
+
+Entonces el `message.content` para ese mensaje se verá así
 
 <!-- eslint-skip -->
 ```js
-'I think we should add <@86890631690977280> to the <@&134362454976102401> role.'
+'Creo que deberíamos agregar <@ 86890631690977280> al rol <@ & 134362454976102401>.'
 ```
 
-## Implementation
+## Implementación
 
-So, how do you use this new information for your bot?  
-Most of your code will not change; however, instead of using `message.mentions` to find the mentioned users, you will have to do it manually.  
-This may sound scary at first, but you will see it is pretty simple once you see the code.
+Entonces, ¿cómo usas esta nueva información para tu bot?
+La mayor parte de su código no cambiará; sin embargo, en lugar de usar `message.mentions` para encontrar los usuarios mencionados, tendrás que hacerlo manualmente.
+Esto puede sonar aterrador al principio, pero veráz que es bastante simple una vez que veas el código.
 
-Say you already have a simple command handler like this:
+Digamos que ya tienes un controlador de comandos simple como este:
 
 ```js
 client.on('messageCreate', message => {
@@ -68,21 +67,20 @@ client.on('messageCreate', message => {
 });
 ```
 
-Now you can quickly test the waters by upgrading the avatar command from [last time](/creating-your-bot/commands-with-user-input.md).
-This is what we have so far. It is pretty simple; it will show the avatar of who used the command.
+Ahora puedes probar rápidamente las aguas actualizando el comando avata
+Esto es lo que tenemos hasta ahora. Es bastante simple; mostrará el avatar de quién usó el comando.
 ```js {3-7}
 client.on('messageCreate', message => {
 	// ...
 	if (command === 'avatar') {
 		const user = message.author;
 
-		return message.channel.send(`${user.username}'s avatar: ${user.displayAvatarURL({ dynamic: true })}`);
+		return message.channel.send(`Avatar de ${user.username}: ${user.displayAvatarURL({ dynamic: true })}`);
 	}
 });
 ```
 
-But how do you get the correct user now? Well, this requires a few simple steps.  
-Putting it into a function will make it easily reusable. We will use the name `getUserFromMention` here.
+Pero, ¿cómo se obtiene el usuario correcto ahora? Bueno, esto require unos sencillos pasos. Ponerlo en una función lo hará fácilmente reutilizable. Usaremos el nombre `get User From Mention` aquí
 ```js
 function getUserFromMention(mention) {
 	if (!mention) return;
@@ -99,19 +97,19 @@ function getUserFromMention(mention) {
 }
 ```
 
-As you can see, it is a relatively straightforward function.
-It essentially just works itself through the structure of the mention bit by bit:
- 1. Check if the mention starts with the `<@` and ends with a `>` and then remove those.
- 2. If the user has a nickname and their mention contains a `!`, remove that as well.
- 3. Only the ID should be left now, so use that to fetch the user from the `client.users.cache` Collection.
-Whenever it encounters an error with the mention (i.e., invalid structure), it merely returns `undefined` to signal the mention is invalid.
+Como puedes ver, es una función relativamente sencilla.
+Básicamente, solo funciona a través de la estructura de la mención poco a poco:
+  1. Comprueba si la mención comienza con `<@` y termina con `>` y luego elimínalos.
+  2. Si el usuario tiene un apodo y su mención contiene un `!`, Elimínalo también.
+  3. Ahora solo debe dejarse el ID, así que utilícelo para buscar el usuario de la colección `client.users.cache`.
+Siempre que encuentra un error con la mención (es decir, estructura no válida), simplemente devuelve "indefinido" para indicar que la mención no es válida.
 
 ::: tip
-The `.slice()` method is used in a more advanced way here. You can read the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice) for more info.
+El método `.slice ()` se usa aquí de una manera más avanzada. Puedes leer el [Documentación MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice) para más información
 :::
 
-Now you have a nifty function you can use to convert a raw mention into a proper user object.
-Plugging it into the command will give you this:
+Ahora tiene una función ingeniosa que puede usar para convertir una mención sin formato en un objeto de usuario adecuado.
+Conectarlo al comando te dará esto:
 
 ```js {4-11}
 client.on('messageCreate', message => {
@@ -120,126 +118,125 @@ client.on('messageCreate', message => {
 		if (args[0]) {
 			const user = getUserFromMention(args[0]);
 			if (!user) {
-				return message.reply('Please use a proper mention if you want to see someone elses avatar.');
+				return message.reply('Utilice una mención adecuada si desea ver el avatar de otra persona.');
 			}
 
-			return message.channel.send(`${user.username}'s avatar: ${user.displayAvatarURL({ dynamic: true })}`);
+			return message.channel.send(`Avatar de ${user.username}: ${user.displayAvatarURL({ dynamic: true })}`);
 		}
 
-		return message.channel.send(`${message.author.username}, your avatar: ${message.author.displayAvatarURL({ dynamic: true })}`);
+		return message.channel.send(`${message.author.username}, tu avatar: ${message.author.displayAvatarURL({ dynamic: true })}`);
 	}
 });
 ```
 
-And here, we plug the new function into the command.  
-If the user-supplied an argument, it should be the user mention, so it just gets passed right into the function.
+Y aquí, conectamos la nueva función al comando.
+Si el usuario proporcionó un argumento, debería ser la mención del usuario, por lo que simplemente se pasa directamente a la función.
 
-And that is it! Simple, isn't it? Start up your bot and see if it works.
+¡Y eso es todo! Simple, ¿no es así? Inicia tu bot y ve si funciona.
 
 <DiscordMessages>
-	<DiscordMessage author="AnotherUser" avatar="green">
+	<DiscordMessage author="Awoo" avatar="green">
 		!avatar <DiscordMention profile="user" />
 	</DiscordMessage>
 	<DiscordMessage profile="bot">
-		User's avatar:
+		Avatar del usuario:
 		<a href="https://i.imgur.com/AfFp7pu.png" target="_blank" rel="noreferrer noopener">https://cdn.discordapp.com/avatars/123456789012345678/0ab1c2d34efg5678902345h6i7890j12.png</a>
 		<br />
 		<img src="https://i.imgur.com/AfFp7pu.png" style="width: 128px; height: 128px;" alt="" />
 	</DiscordMessage>
 </DiscordMessages>
 
-So now, instead of using `message.mentions`, you can use your new, fantastic function.
-This will allow you to add proper checks for all your args so that you can tell when a command is and isn't used correctly.
+Así que ahora, en lugar de usar `message.mentions`, puedes usar tu nueva y fantástica función.
+Esto te permitirá agregar comprobaciones adecuadas para todos sus argumentos para que pueda saber cuándo un comando se usa y no se usa correctamente.
 
-But this does not mark the end of the page. If you feel adventurous, you can read on and learn how to use Regular Expressions to easily convert a mention into a user object in just two lines.
+Pero esto no marca el final de la página. Si te sientes aventurero, puede seguir leyendo y aprender a usar las expresiones regulares para convertir fácilmente una mención en un objeto de usuario en solo dos líneas.
 
-### Ban command
+### Comando ban
 
-You now know how to parse user mentions for a simple command like the avatar command. However, the avatar command does not benefit from it as much as the intro's example.
+Ahora sabes cómo analizar las menciones de los usuarios para un comando simple como el comando avatar. Sin embargo, el comando avatar no se beneficia tanto como el ejemplo de la introducción.
 
-When writing a ban command where a mention might appear in the reason, manual parsing mentions is a lot more important. You can see an example of how to do it as follows:
-
+Al escribir un comando de ban en el que puede aparecer una mención en el motivo, las menciones de análisis manual son mucho más importantes. Puede ver un ejemplo de cómo hacerlo de la siguiente manera:
 ```js {1,3-21}
 client.on('messageCreate', async message => {
 	// ...
 	if (command === 'ban') {
 		if (args.length < 2) {
-			return message.reply('Please mention the user you want to ban and specify a ban reason.');
+			return message.reply('Menciona al usuario que quieres banear y especifique un motivo de este.');
 		}
 
 		const user = getUserFromMention(args[0]);
 		if (!user) {
-			return message.reply('Please use a proper mention if you want to ban someone.');
+			return message.reply('Utiliza una mención adecuada si desea banear a alguien.');
 		}
 
 		const reason = args.slice(1).join(' ');
 		try {
 			await message.guild.members.ban(user, { reason });
 		} catch (error) {
-			return message.channel.send(`Failed to ban **${user.tag}**: ${error}`);
+			return message.channel.send(`No se puedo banear: **${user.tag}**: ${error}`);
 		}
 
-		return message.channel.send(`Successfully banned **${user.tag}** from the server!`);
+		return message.channel.send(`Se baneo a **${user.tag}** correctamente de este servidor!`);
 	}
 });
 ```
 
-Now if you send a command like the following you can always be sure it will use the mention at the very front to figure out who to ban, and will properly validate the mention:
+Ahora, si envías un comando como el siguiente, siempre puedes estar seguro de que usarás la mención al principio para averiguar a quién banear, y validarás adecuadamente la mención:
 
 <DiscordMessages>
-	<DiscordMessage profile="user">
-		!ban <DiscordMention>Offender</DiscordMention> because they were rude to <DiscordMention>Victim</DiscordMention>.
-	</DiscordMessage>
+<DiscordMessage profile = "usuario">
+!ban <DiscordMention>Offender</DiscordMention>porque fue groseros con<DiscordMention>Victim</DiscordMention>.
+</DiscordMessage>
 </DiscordMessages>
 
-### Using Regular Expressions
+### Uso de expresiones regulares
 
-Previously you learn how to use rudimentary string-related functions to turn the special mention syntax Discord uses into a proper discord.js User object.
-But using Regular Expressions (aka "RegEx" or "RegExp"), you can condense all that logic into a single line! Crazy, right?
+Anteriormente, aprendiste a usar funciones rudimentarias relacionadas con cadenas para convertir la sintaxis de mención especial que usa Discord en un objeto de usuario de discord.js adecuado.
+Pero usando expresiones regulares (también conocidas como "RegEx" o "RegExp"), ¡puedes condensar toda esa lógica en una sola línea! Loco, ¿verdad?
 
-If you have never worked with Regular Expressions before, this might seem daunting. But in fact, you already have used regular expressions. Remember `withoutPrefix.split(/ +/);`? This little `/ +/` is a Regular Expression. The `/` on either side tell JavaScript where the Regular Expression begins and where it ends; the stuff in between is its content. 
+Si nunca antes has trabajado con expresiones regulares, esto puede parecer abrumador. Pero, de hecho, ya has utilizado expresiones regulares. ¿Recuerda `withoutPrefix.split (/ + /);`? Este pequeño `/ + /` es una expresión regular. El `/` a cada lado le dice a JavaScript dónde comienza y dónde termina la expresión regular; el material intermedio es su contenido.
 
 ::: tip
-For a more detailed explanation, please consult the [MDN's documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+Para obtener una explicación más detallada, consulte la [Documentación de MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 :::
 
-The RegEx you will use for user mentions will look like this: `/^<@!?(\d+)>$/`.
-Here is how the RegEx works:
+La expresión regular que utilizarás para las menciones de los usuarios tendrá este aspecto: `/ ^ <@ !? (\ d +)> $ /`.
+Así es como funciona la expresión regular:
 
- 1. The `^` at the beginning and the `$` at the end means the mention has to take up the entire string.
- 2. You have the typical `<@` and `>` at the beginning and end.
- 3. The `?` after the `!` indicates that the `!` is optional.
- 4. `\d+` means the RegEx will look for multiple digits, which will be the ID.
- 5. The parentheses around the `\d+` create a capture group, which allows you to get the ID out of the mention.
+ 1. El `^` al principio y el `$` al final significa que la mención debe ocupar toda la cadena.
+ 2. Tiene los típicos `<@` y `>` al principio y al final.
+ 3. El `?` Después del `!` Indica que el `!` Es opcional.
+ 4. `\ d +` significa que la expresión regular buscará varios dígitos, que serán el ID.
+ 5. Los paréntesis alrededor de `\ d +` crean un grupo de captura, que le permite sacar el ID de la mención.
 
-Using the `.match()` method on strings, you can get the capture group's values, i.e., the mention's ID.
+Usando el método `.match ()` en cadenas, puedes obtener los valores del grupo de captura, es decir, el ID de la mención.
 
-::: warning ADVERTENCIA
-discord.js has <DocsLink path="class/MessageMentions?scrollTo=s-CHANNELS_PATTERN">built-in patterns</DocsLink> for matching mentions, however as of version 11.4 they do not contain any groups
-and thus aren't useful for actually getting the ID out of the mention.
+::: advertencia ADVERTENCIA
+discord.js tiene <DocsLink path = "class / MessageMentions? scrollTo = s-CHANNELS_PATTERN"> patrones integrados </DocsLink> para las menciones coincidentes, sin embargo, a partir de la versión 11.4 no contienen ningún grupo
+y, por lo tanto, no son útiles para eliminar la identificación de la mención.
 :::
 
-Updating your `getUserFromMention` function to use RegEx gives you this:
+Actualizar su función `getUserFromMention` para usar RegEx le da esto:
 
 ```js
 function getUserFromMention(mention) {
-	// The id is the first and only match found by the RegEx.
+	//La identificación es la primera y única coincidencia encontrada por la expresión regular.
 	const matches = mention.match(/^<@!?(\d+)>$/);
 
-	// If supplied variable was not a mention, matches will be null instead of an array.
+	// Si la variable proporcionada no fue una mención, las coincidencias serán nulas en lugar de un array
 	if (!matches) return;
 
-	// However, the first element in the matches array will be the entire mention, not just the ID,
-	// so use index 1.
+	// Sin embargo, el primer elemento del array de coincidencias será la mención completa, no solo el ID,
+    // Entonces usa el index 1.
 	const id = matches[1];
 
 	return client.users.cache.get(id);
 }
 ```
 
-See? That is *much* shorter and not that complicated.
-If you rerun your bot now, everything should still work the same.
+Ves?? Eso es *mucho* más corto y no tan complicado.
+Si vuelves a ejecutar tu bot ahora, todo debería de funcionar igual
 
-## Resulting code
+## Resultado del código
 
 <ResultingCode />
