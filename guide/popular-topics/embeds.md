@@ -7,45 +7,45 @@ En la siguiente sección, explicaremos como componer un embed, enviarlo y qué d
 
 ## Vista previa de un embed
 
-Here is an example of how an embed may look. We will go over embed construction in the next part of this guide.
+Este es un ejemplo de cómo puede ser un embed. En la siguiente parte de esta guía, repasaremos la construcción de estos.
 
 <DiscordMessages>
 	<DiscordMessage profile="bot">
 		<template #embeds>
 			<DiscordEmbed
 				border-color="#0099ff"
-				embed-title="Some title"
+				embed-title="Algún título"
 				url="https://discord.js.org/"
 				thumbnail="https://i.imgur.com/AfFp7pu.png"
 				image="https://i.imgur.com/AfFp7pu.png"
 				footer-icon="https://i.imgur.com/AfFp7pu.png"
 				timestamp="01/01/2018"
-				author-name="Some name"
+				author-name="Algún nombre"
 				author-icon="https://i.imgur.com/AfFp7pu.png"
 				author-url="https://discord.js.org/"
 			>
-				Some description here
+				Alguna descripción aquí
 				<template #fields>
 					<DiscordEmbedFields>
-						<DiscordEmbedField field-title="Regular field title">
-							Some value here
+						<DiscordEmbedField field-title="Título del campo regular">
+							Un valor aquí
 						</DiscordEmbedField>
 						<DiscordEmbedField field-title="​">
 							​
 						</DiscordEmbedField>
-						<DiscordEmbedField :inline="true" field-title="Inline field title">
-							Some value here
+						<DiscordEmbedField :inline="true" field-title="Título del campo en línea">
+							Un valor aquí
 						</DiscordEmbedField>
-						<DiscordEmbedField :inline="true" field-title="Inline field title">
-							Some value here
+						<DiscordEmbedField :inline="true" field-title="Título del campo en línea">
+							Un valor aquí
 						</DiscordEmbedField>
-						<DiscordEmbedField :inline="true" field-title="Inline field title">
-							Some value here
+						<DiscordEmbedField :inline="true" field-title="Título del campo en línea">
+							Un valor aquí
 						</DiscordEmbedField>
 					</DiscordEmbedFields>
 				</template>
 				<template #footer>
-					<span>Some footer text here</span>
+					<span>Un poco de texto de pie de página</span>
 				</template>
 			</DiscordEmbed>
 		</template>
@@ -54,36 +54,36 @@ Here is an example of how an embed may look. We will go over embed construction 
 
 ## Using the embed constructor
 
-discord.js features the <DocsLink path="class/MessageEmbed">`MessageEmbed`</DocsLink> utility class for easy construction and manipulation of embeds.
+discord.js cuenta con <DocsLink path="class/MessageEmbed">`MessageEmbed`</DocsLink> clase de utilidad para una fácil construcción y manipulación de embeds.
 
 ```js
-// at the top of your file
+// en la parte superior de su archivo
 const { MessageEmbed } = require('discord.js');
 
-// inside a command, event listener, etc.
+// dentro de un comando, listener de eventos, etc.
 const exampleEmbed = new MessageEmbed()
 	.setColor('#0099ff')
-	.setTitle('Some title')
+	.setTitle('Algún título')
 	.setURL('https://discord.js.org/')
-	.setAuthor('Some name', 'https://i.imgur.com/AfFp7pu.png', 'https://discord.js.org')
-	.setDescription('Some description here')
+	.setAuthor('Algún nombre', 'https://i.imgur.com/AfFp7pu.png', 'https://discord.js.org')
+	.setDescription('Alguna descripción aquí')
 	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
 	.addFields(
-		{ name: 'Regular field title', value: 'Some value here' },
+		{ name: 'Título del campo regular', value: 'Un valor aquí' },
 		{ name: '\u200B', value: '\u200B' },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
+		{ name: 'Título del campo en línea', value: 'Un valor aquí', inline: true },
+		{ name: 'Título del campo en línea', value: 'Un valor aquí', inline: true },
 	)
-	.addField('Inline field title', 'Some value here', true)
+	.addField('Título del campo en línea', 'Un valor aquí', true)
 	.setImage('https://i.imgur.com/AfFp7pu.png')
 	.setTimestamp()
-	.setFooter('Some footer text here', 'https://i.imgur.com/AfFp7pu.png');
+	.setFooter('Un poco de texto de pie de página', 'https://i.imgur.com/AfFp7pu.png');
 
 channel.send({ embeds: [exampleEmbed] });
 ```
 
 ::: tip
-You don't need to include all the elements showcased above. If you want a simpler embed, leave some out.
+No es necesario que incluya todos los elementos mostrados anteriormente. Si desea una inserción más simple, omita algunas.
 :::
 
 The `.setColor()` method accepts an integer, HEX color string, an array of RGB values or specific color strings. You can find a list of them at <DocsLink path="typedef/ColorResolvable">the discord.js documentation</DocsLink>.
