@@ -117,7 +117,7 @@ console.log(`
 
 Puedes ver cómo hace las cosas más fáciles y más legibles. ¡En algunos casos, incluso pude acortar su código! Este es algo que querrás aprovechar tanto como sea posible.
 
-## Funciones "arrow"
+## Funciones flecha
 
 Las funciones flecha son una abreviatura de las funciones normales, con la adición de que utilizan un contexto léxico `this` dentro del suyo propio. Si no sabes a qué se refiere la palabra clave `this`, no te preocupes; aprenderás más sobre ella a medida que avances.
 
