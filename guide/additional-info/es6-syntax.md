@@ -66,7 +66,7 @@ else if (commandName === 'user-info') {
 
 ¡Más fácil de leer y de escribir! Lo mejor de ambos mundos.
 
-### "Template literals" contra concatenación de strings
+### Literales de plantilla contra concatenación de cadenas de texto
 
 Si ha usado otros lenguajes de programación, puedes estar familiarizado con el término "string interpolation". "Template literals" es la implementación de javascript de la interpolación de cadenas. Si estás familiarizado con la sintaxis de heredoc, es muy parecida; permite la interpolación de cadenas, así como cadenas multilíneas.
 
