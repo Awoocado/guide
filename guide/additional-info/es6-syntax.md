@@ -121,7 +121,11 @@ Puedes ver cómo hace las cosas más fáciles y más legibles. ¡En algunos caso
 
 Las funciones "arrow" son abreviadas para funciones normales, con la adición de que utilizan un `léxico este` contexto dentro de su propio contexto. Si no sabes a qué se refiere `esta palabra clave`, no te preocupes por ello; aprenderás más sobre ella a medida que avanzas.
 
-Aquí tienes algunos ejemplos de cómo puedes beneficiarte de las funciones "arrow" sobre funciones regulares:<!-- eslint-disable func-names, no-var, prefer-arrow-callback, prefer-template -->```js
+Aquí tienes algunos ejemplos de cómo puedes beneficiarte de las funciones flecha sobre funciones regulares:
+
+<!-- eslint-disable func-names, no-var, prefer-arrow-callback, prefer-template -->
+
+```js
 // funciones regulares, ES5 completo
 client.once('ready', function() {
     console.log('Ready!');
