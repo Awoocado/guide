@@ -1,4 +1,4 @@
-# Ejemplos de sintaxis ES6
+# Sintaxis ES6
 
 Si has usado JavaScript sólo por una pequeña cantidad de tiempo (relativamente) o no tienes mucha experiencia con él, puede que no sepas qué es ES6 y qué características incluye. Dado que esta es una guía principalmente para los bots de Discord, usaremos algo de discord.js como un ejemplo de los beneficios de ES6.
 
