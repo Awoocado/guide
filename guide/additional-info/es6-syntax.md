@@ -38,7 +38,7 @@ client.login(config.token);
 
 Si no te has dado cuenta, ¡este código ya está usando un poco de ES6! El `const` palabra clave y declaración de la función "arrow"(`() => . .`) es sintaxis ES6, y recomendamos usarla siempre que sea posible.
 
-En cuanto al codigo anterior hay algunas cosas que se podrían hacer mejor. Veámoslas.
+En cuanto al código anterior hay algunas cosas que se podrían hacer mejor. Veámoslas.
 
 ## "Template literals"
 
