@@ -55,7 +55,7 @@ else if (commandName === 'user-info') {
     interaction.reply('Tu nombre de usuario: ' + interaction.user.username + '\nTu Id: ' + interaction.user.id);
 }
 ```<!-- eslint-skip -->```js
-// ES6 version, usando "template literals"
+// Versión ES6, usando literales de plantilla
 else if (commandName === 'server') {
     interaction.reply(`Guild name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
 }
