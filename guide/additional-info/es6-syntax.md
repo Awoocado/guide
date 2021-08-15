@@ -36,7 +36,7 @@ client.on('interactionCreate', interaction => {
 client.login(config.token);
 ```
 
-Si no te has dado cuenta, ¡este código ya está usando un poco de ES6! El uso de `const` y la función "arrow"(`() => . .`) es sintaxis ES6, y recomendamos usarla siempre que sea posible.
+Si no te has dado cuenta, ¡Este código ya está usando un poco de ES6! El uso de `const` y la función "flecha" (`() => ...`) es sintaxis ES6, y recomendamos usarla siempre que sea posible.
 
 En cuanto al código anterior hay algunas cosas que se podrían hacer mejor. Veámoslas.
 
