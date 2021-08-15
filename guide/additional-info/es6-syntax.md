@@ -144,7 +144,7 @@ var filter = function(m) {
     return m.content === 'I agree' && !m.author.bot;
 };
 
-var collector = message.createMessageCollector(filter, { time: 15000 });
+var collector = message.channel.createMessageCollector({ filter, time: 15000 });
 ```
 
 ```js
