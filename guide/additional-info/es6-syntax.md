@@ -57,7 +57,7 @@ else if (commandName === 'user-info') {
 ```<!-- eslint-skip -->```js
 // Versión ES6, usando literales de plantilla
 else if (commandName === 'server') {
-    interaction.reply(`Guild name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+    interaction.reply(`Nombre del servidor: ${interaction.guild.name}\nMiembros totales: ${interaction.guild.memberCount}`);
 }
 else if (commandName === 'user-info') {
     interaction.reply(`Your username: ${interaction.user.username}\nYour ID: ${interaction.user.id}`);
