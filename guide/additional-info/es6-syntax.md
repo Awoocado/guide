@@ -40,7 +40,7 @@ Si no te has dado cuenta, ¡Este código ya está usando un poco de ES6! El uso 
 
 En cuanto al código anterior hay algunas cosas que se podrían hacer mejor. Veámoslas.
 
-## "Template literals"
+## Literales de plantilla
 
 Si revisas el código de arriba, está haciendo cosas como `'Nombre del gremio: ' + interaction.guild. nombre` y `'Tu nombre de usuario: ' + interaction.user.username`, que es perfectamente válida. Sin embargo, es un poco difícil de leer, y no es demasiado entretenido escribirlo constantemente. Afortunadamente, hay una mejor alternativa.<!-- eslint-skip -->```js
 // ES5, la cersion que tenemos
