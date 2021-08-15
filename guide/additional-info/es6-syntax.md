@@ -162,7 +162,7 @@ Hay algunas cosas importantes que debe tener en cuenta:
 
 * Los paréntesis alrededor de los parámetros de la función son opcionales cuando sólo tiene un parámetro, pero son requeridos de otra manera. Si crees que esto te confundirá, puede ser una buena idea usar paréntesis.
 * Puedes poner limpiamente lo que necesitas en una sola línea, sin llaves.
-* Omitir llaves hará que las funciones de flecha usen **implicit retrun**, pero solo si tienes una expresión de una sola línea. Las variables `doubleAge` y `filter` son un buen ejemplo de esto.
+* Omitir llaves hará que las funciones "arrow" usen **implicit retrun**, pero solo si tienes una expresión de una sola línea. Las variables `doubleAge` y `filter` son un buen ejemplo de esto.
 * A diferencia de la declaración de `función someFunc() { ... }` , las funciones "arrow" no pueden utilizarse para crear funciones con tal sintaxis. Puedes crear una variable y darle una función ""arrow" anónima como el valor, aunque (como se ve con la `doubleAge` y `filter` variables).
 
 No cubriremos el ámbito léxico `this` con funciones "arrow" aquí, pero puedes "googlear" mas sobre eso. De nuevo, si no estás seguro de qué `this` o cuando lo necesitas, leyendo sobre el léxico `this` solo puede confundirte.
