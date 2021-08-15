@@ -139,7 +139,7 @@ var doubleAge = function(age) {
     return 'Your age doubled is: ' + (age * 2);
 };
 
-// inside Dentro de un message collector
+// dentro de un collector de mensajes
 var filter = function(m) {
     return m.content === 'I agree' && !m.author.bot;
 };
