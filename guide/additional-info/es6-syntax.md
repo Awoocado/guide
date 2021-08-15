@@ -49,7 +49,7 @@ Si revisas el código de arriba, está haciendo cosas como `'Nombre del servidor
 ```js
 // ES5, la versión que tenemos
 else if (commandName === 'server') {
-    interaction.reply('Guild name: ' + interaction.guild.name + '\nTotal members: ' + interaction.guild.memberCount);
+    interaction.reply('Nombre del servidor: ' + interaction.guild.name + '\nMiembros totales: ' + interaction.guild.memberCount);
 }
 else if (commandName === 'user-info') {
     interaction.reply('Your username: ' + interaction.user.username + '\nYour ID: ' + interaction.user.id);
