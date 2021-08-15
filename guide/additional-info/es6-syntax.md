@@ -52,7 +52,7 @@ else if (commandName === 'server') {
     interaction.reply('Nombre del servidor: ' + interaction.guild.name + '\nMiembros totales: ' + interaction.guild.memberCount);
 }
 else if (commandName === 'user-info') {
-    interaction.reply('Your username: ' + interaction.user.username + '\nYour ID: ' + interaction.user.id);
+    interaction.reply('Tu nombre de usuario: ' + interaction.user.username + '\nTu Id: ' + interaction.user.id);
 }
 ```<!-- eslint-skip -->```js
 // ES6 version, usando "template literals"
