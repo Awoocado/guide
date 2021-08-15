@@ -70,7 +70,7 @@ else if (commandName === 'user-info') {
 
 Si ha usado otros lenguajes de programación, puedes estar familiarizado con el término "string interpolation". "Template literals" es la implementación de javascript de la interpolación de cadenas. Si estás familiarizado con la sintaxis de heredoc, es muy parecida; permite la interpolación de cadenas, así como cadenas multilíneas.
 
-El ejemplo a continuación no entrará demasiado en detalles sobre el mismo pero si estás interesado en leer más, puedes [leer sobre ellos en MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals).
+El siguiente ejemplo no entrará demasiado en detalles sobre el mismo, pero si estás interesado en saber más, puedes leer sobre ellos en [la documentación de MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals).
 
 ```js
 // variables y funciones usadas en los ejemplos 
