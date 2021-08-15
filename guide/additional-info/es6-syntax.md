@@ -119,7 +119,7 @@ Puedes ver cómo hace las cosas más fáciles y más legibles. ¡En algunos caso
 
 ## Funciones "arrow"
 
-Las funciones "arrow" son abreviadas para funciones normales, con la adición de que utilizan un `léxico este` contexto dentro de su propio contexto. Si no sabes a qué se refiere `esta palabra clave`, no te preocupes por ello; aprenderás más sobre ella a medida que avanzas.
+Las funciones flecha son una abreviatura de las funciones normales, con la adición de que utilizan un contexto léxico `this` dentro del suyo propio. Si no sabes a qué se refiere la palabra clave `this`, no te preocupes; aprenderás más sobre ella a medida que avances.
 
 Aquí tienes algunos ejemplos de cómo puedes beneficiarte de las funciones flecha sobre funciones regulares:
 
