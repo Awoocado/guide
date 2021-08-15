@@ -27,9 +27,9 @@ client.on('interactionCreate', interaction => {
     } else if (commandName === 'beep') {
         interaction.reply('Boop.');
     } else if (commandName === 'server') {
-        interaction.reply('Guild name: ' + interaction.guild.name + '\nTotal members: ' + interaction.guild.memberCount);
+        interaction.reply('Nombre del servidor: ' + interaction.guild.name + '\nMiembros totales: ' + interaction.guild.memberCount);
     } else if (commandName === 'user-info') {
-        interaction.reply('Your username: ' + interaction.user.username + '\nYour ID: ' + interaction.user.id);
+        interaction.reply('Tu nombre de usuario: ' + interaction.user.username + '\nTu Id: ' + interaction.user.id);
     }
 });
 
