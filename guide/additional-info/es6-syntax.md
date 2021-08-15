@@ -42,8 +42,12 @@ En cuanto al código anterior, hay algunas cosas que se podrían mejorar. Veámo
 
 ## Literales de plantilla
 
-Si revisas el código de arriba, está haciendo cosas como `'Nombre del gremio: ' + interaction.guild. nombre` y `'Tu nombre de usuario: ' + interaction.user.username`, que es perfectamente válida. Sin embargo, es un poco difícil de leer, y no es demasiado entretenido escribirlo constantemente. Afortunadamente, hay una mejor alternativa.<!-- eslint-skip -->```js
-// ES5, la cersion que tenemos
+Si revisas el código de arriba, está haciendo cosas como `'Nombre del servidor: ' + interaction.guild.name` y `'Tu nombre de usuario: ' + interaction.user.username`, que es perfectamente válido. Sin embargo, es un poco difícil de leer, y no es demasiado entretenido escribirlo constantemente. Afortunadamente, hay una mejor alternativa.
+
+<!-- eslint-skip -->
+
+```js
+// ES5, la versión que tenemos
 else if (commandName === 'server') {
     interaction.reply('Guild name: ' + interaction.guild.name + '\nTotal members: ' + interaction.guild.memberCount);
 }
