@@ -1,14 +1,14 @@
-# Storing data with Keyv
+# Almacenando datos con Keyv
 
-[Keyv](https://github.com/lukechilds/keyv) is a simple key-value store that works with multiple backends. It's fully scalable for [sharding](/sharding/) and supports JSON storage.
+[Keyv](https://github.com/lukechilds/keyv) es una simple base de datos de clave-valor que funciona con múltiples backends. Es completamente escalable para el ["Sharding"](/sharding/) y soporta almacenamiento JSON.
 
-## Installation
+## Instalación
 
 ```bash
 npm install --save keyv
 ```
 
-Keyv requires an additional package depending on which persistent backend you would prefer to use. If you want to keep everything in memory, you can skip this part. Otherwise, install one of the below.
+Keyv requiere un paquete adicional dependiendo del backend que prefieras usar. Si quieres mantener todo en la memoria, puedes omitir esta parte. De lo contrario, instala uno de los siguientes.
 
 ```bash
 npm install --save @keyv/redis
@@ -18,14 +18,11 @@ npm install --save @keyv/postgres
 npm install --save @keyv/mysql
 ```
 
-Create an instance of Keyv once you've installed Keyv and any necessary drivers.
-
-<!-- eslint-skip -->
-```js
+Crear una instancia de Keyv después de haber instalado Keyv y los controladores necesarios.<!-- eslint-skip -->```js
 const Keyv = require('keyv');
 
-// One of the following
-const keyv = new Keyv(); // for in-memory storage
+// Unos de los siguientes
+const keyv = new Keyv(); // para guardar en memoria
 const keyv = new Keyv('redis://user:pass@localhost:6379');
 const keyv = new Keyv('mongodb://user:pass@localhost:27017/dbname');
 const keyv = new Keyv('sqlite://path/to/database.sqlite');
@@ -33,43 +30,41 @@ const keyv = new Keyv('postgresql://user:pass@localhost:5432/dbname');
 const keyv = new Keyv('mysql://user:pass@localhost:3306/dbname');
 ```
 
-Make sure to handle connection errors.
+Asegurate de manejar errores de conexión.
 
 ```js
-keyv.on('error', err => console.error('Keyv connection error:', err));
+keyv.on('error', err => console.error('Error de conexión:', err));
 ```
 
-For a more detailed setup, check out the [Keyv readme](https://github.com/lukechilds/keyv/blob/master/README.md).
+Para una configuración más detallada, lee el [Keyv readme](https://github.com/lukechilds/keyv/blob/master/README.md).
 
-## Usage
+## Uso
 
-Keyv exposes a familiar [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)-like API. However, it only has `set`, `get`, `delete`, and `clear` methods. Additionally, instead of immediately returning data, these methods return [Promises](/additional-info/async-await.md) that resolve with the data.
+Keyv expone una API familiar a los "[Maps](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)". Sin embargo, solo tiene los métodos `set`, `get`, `delete`y `clear`. Además, en lugar de devolver datos inmediatamente, estos métodos retornan [Promesas](/additional-info/async-await.md) que se resuelven con los datos.
 
 ```js
 (async () => {
-	// true
-	await keyv.set('foo', 'bar');
+    // true
+    await keyv.set('foo', 'bar');
 
-	// bar
-	await keyv.get('foo');
+    // bar
+    await keyv.get('foo');
 
-	// undefined
-	await keyv.clear();
+    // undefined
+    await keyv.clear();
 
-	// undefined
-	await keyv.get('foo');
+    // undefined
+    await keyv.get('foo');
 })();
 ```
 
-## Application
+## Aplicación
 
-Although Keyv can assist in any scenario where you need key-value data, we will focus on setting up a per-guild prefix configuration using Sqlite.
+Aunque Keyv puede ayudar en cualquier caso donde necesite datos de clave-valor, nos centraremos en configurar un prefijo por guild usando Sqlite.
 
-::: tip
-This section will still work with any provider supported by Keyv. We recommend PostgreSQL for larger applications.
-:::
+::: consejo Esta sección seguirá funcionando con cualquier proveedor soportado por Keyv. Recomendamos PostgreSQL para aplicaciones más grandes. :::
 
-### Setup
+### Configuración incial
 
 ```js
 const Keyv = require('keyv');
@@ -80,91 +75,91 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const prefixes = new Keyv('sqlite://path/to.sqlite');
 ```
 
-### Command handler
+### Usando "Command handler"
 
-This guide uses a very basic command handler with some added complexity to allow for multiple prefixes. Look at the [command handling](/command-handling/) guide for a more robust command handler.
+Esta guía utiliza un "command handler "comandos muy básico añadiendo cierta complejidad para permitir múltiples prefijos. Mira la guía de "[command handler ](/command-handling/)" para un mejor "command handler".
 
 ```js
 client.on('messageCreate', async message => {
-	if (message.author.bot) return;
+    if (message.author.bot) return;
 
-	let args;
-	// handle messages in a guild
-	if (message.guild) {
-		let prefix;
+    let args;
+    // comandos en servidores
+if (message.guild) {
+        let prefix;
 
-		if (message.content.startsWith(globalPrefix)) {
-			prefix = globalPrefix;
-		} else {
-			// check the guild-level prefix
-			const guildPrefix = await prefixes.get(message.guild.id);
-			if (message.content.startsWith(guildPrefix)) prefix = guildPrefix;
-		}
+        if (message.content.startsWith(globalPrefix)) {
+            prefix = globalPrefix;
+        } else {
+            //comprueba el prefijo de servidor-nivel
+            const guildPrefix = await prefixes.get(message.guild.id);
+            if (message.content.startsWith(guildPrefix)) prefix = guildPrefix;
+        }
 
-		// if we found a prefix, setup args; otherwise, this isn't a command
-		if (!prefix) return;
-		args = message.content.slice(prefix.length).trim().split(/\s+/);
-	} else {
-		// handle DMs
-		const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
-		args = message.content.slice(slice).split(/\s+/);
-	}
+        // si encuentra al prefix establece los argumentos, si no es un comando
+        if (!prefix) return;
+        args = message.content.slice(prefix.length).trim().split(/\s+/);
+    } else {
+        // mensajes directos 
+       const slice = message.content.startsWith(globalPrefix) ? globalPrefix.length : 0;
+        args = message.content.slice(slice).split(/\s+/);
+    }
 
-	// get the first space-delimited argument after the prefix as the command
-	const command = args.shift().toLowerCase();
+    // consigue el primer argumento después del prefix como el comando
+    const command = args.shift().toLowerCase();
 });
 ```
 
-### Prefix command
+### Comando prefijo
 
-Now that you have a command handler, you can make a command to allow people to use your prefix system.
+Ahora que tienes un "command handler", puedes hacer un comando para permitir que la gente use su sistema de multiples prefijos.
 
 ```js {3-11}
 client.on('messageCreate', async message => {
-	// ...
-	if (command === 'prefix') {
-		// if there's at least one argument, set the prefix
-		if (args.length) {
-			await prefixes.set(message.guild.id, args[0]);
-			return message.channel.send(`Successfully set prefix to \`${args[0]}\``);
-		}
+    // ...
+    if (command === 'prefijo') {
+        // if there's at least one argument, set the prefix
+        if (args.length) {
+            await prefixes.set(message.guild.id, args[0]);
+            return message.channel.send(`Se cambió el prefijo a  \`${args[0]}\``);
+        }
 
-		return message.channel.send(`Prefix is \`${await prefixes.get(message.guild.id) || globalPrefix}\``);
-	}
+        return message.channel.send(`El prefijo es \`${await prefixes.get(message.guild.id) || globalPrefix}\``);
+    }
 });
 ```
 
-You will probably want to set up additional validation, such as required permissions and maximum prefix length.
+Probablemente querrá configurar una validación adicional, como los permisos requeridos y la longitud máxima del prefijo.
 
-### Usage
+### Uso
 
 <DiscordMessages>
-	<DiscordMessage profile="user">
-		.prefix
-	</DiscordMessage>
-	<DiscordMessage profile="bot">
-		Prefix is <code class="discord-message-inline-code">.</code>
-	</DiscordMessage>
-	<DiscordMessage profile="user">
-		.prefix $
-	</DiscordMessage>
-	<DiscordMessage profile="bot">
-		Successfully set prefix to <code class="discord-message-inline-code">$</code>
-	</DiscordMessage>
-	<DiscordMessage profile="user">
-		$prefix
-	</DiscordMessage>
-	<DiscordMessage profile="bot">
-		Prefix is <code class="discord-message-inline-code">$</code>
-	</DiscordMessage>
+    <DiscordMessage profile="user">
+        .prefijo
+    </DiscordMessage>
+    <DiscordMessage profile="bot">
+        El prefijo es <code class="discord-message-inline-code">.</code>
+    </DiscordMessage>
+    <DiscordMessage profile="user">
+        .prefijo $
+    </DiscordMessage>
+    <DiscordMessage profile="bot">
+        Prefijo establecido a <code class="discord-message-inline-code">$</code>
+    </DiscordMessage>
+    <DiscordMessage profile="user">
+        $prefix
+    </DiscordMessage>
+    <DiscordMessage profile="bot">
+        El prefijo es <code class="discord-message-inline-code">$</code>
+    </DiscordMessage>
 </DiscordMessages>
 
-## Next steps
+## Siguientes pasos
 
-Various other applications can use Keyv, such as guild settings; create another instance with a different [namespace](https://github.com/lukechilds/keyv#namespaces) for each setting. Additionally, it can be [extended](https://github.com/lukechilds/keyv#third-party-storage-adapters) to work with whatever storage backend you prefer.
+Otras aplicaciones pueden usar Keyv, como ajustes de servidores; crea otra instancia con un [nombre](https://github.com/lukechilds/keyv#namespaces) diferente para cada configuración. Además, puede ser [extendido](https://github.com/lukechilds/keyv#third-party-storage-adapters) para trabajar con cualquier backend de almacenamiento que prefiera.
 
-Check out the [Keyv repository](https://github.com/lukechilds/keyv) for more information.
+Revisa el repositorio de [Keyv](https://github.com/lukechilds/keyv) para más información.
 
-## Resulting code
+## Resultado final
 
 <ResultingCode />
