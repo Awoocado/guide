@@ -1,19 +1,18 @@
-# Builders
+# Constructures
 
-discord.js provides the [`@discordjs/builders`](https://github.com/discordjs/builders) package which contains a variety of utilities you can use when writing your Discord bot.
-To install the package, run `npm install @discordjs/builders` in your terminal.
+discord.js proporciona el paquete [`@discordjs/builders`](https://github.com/discordjs/builders) que contiene una variedad de utilidades que puedes usar al escribir el código de tu bot. Para instalar este paquete, ejecuta `npm install @discordjs/builders` en tu terminal.
 
-## Formatters
+## Formateadores
 
-Formatters are a set of utility functions that format input strings into the given format.
+Los formateadores son un conjunto de funciones de utilidad que formatean cadenas de entrada en el formato dado.
 
-### Basic Markdown
+### Markdown básico
 
-The Formatters provide functions to format strings into all the different Markdown styles supported by Discord.
+Los formateadores proporcionan funciones para formatear cadenas en todos los diferentes estilos de Markdown admitidos por Discord.
 
 ```js
 const { bold, italic, strikethrough, underscore, spoiler, quote, blockQuote } = require('@discordjs/builders');
-const string = 'Hello!';
+const string = '¡Hola!';
 
 const boldString = bold(string);
 const italicString = italic(string);
@@ -24,9 +23,9 @@ const quoteString = quote(string);
 const blockquoteString = blockQuote(string);
 ```
 
-### Links
+### Enlaces
 
-There are also two methods to format hyperlinks. `hyperlink()` will format the URL into a masked markdown link, and `hideLinkEmbed()` will wrap the URL in `<>`, preventing it from embedding.
+También hay dos métodos para formatear hipervínculos. `hyperlink()` formateará la URL en un enlace enmascarado, y `hideLinkEmbed()` envolverá la URL en `<>`, evitando que se incruste.
 
 ```js
 const { hyperlink, hideLinkEmbed } = require('@discordjs/builders');
@@ -36,9 +35,9 @@ const link = hyperlink(url);
 const hiddenEmbed = hideLinkEmbed(url);
 ```
 
-### Code blocks
+### Bloques de código
 
-You can use `inlineCode()` and `codeBlock()` to turn a string into an inline code block or a regular code block with or without syntax highlighting.
+Puedes usar `inlineCode()` y `codeBlock()` para convertir una cadena de texto en un bloque de código en línea o un bloque de código regular con o sin resaltado de sintaxis.
 
 ```js
 const { inlineCode, codeBlock } = require('@discordjs/builders');
@@ -49,9 +48,9 @@ const codeblock = codeBlock(jsString);
 const highlighted = codeBlock('js', jsString);
 ```
 
-### Timestamps
+### Marcas de tiempo
 
-With `time()`, you can format UNIX timestamps and dates into a Discord time string.
+Con `time()`, puedes formatear las marcas de tiempo y fechas de UNIX en una cadena de tiempo de Discord.
 
 ```js
 const { time } = require('@discordjs/builders');
@@ -61,9 +60,9 @@ const timeString = time(date);
 const relative = time(date, 'R');
 ```
 
-### Mentions
+### Menciones
 
-The Formatters also contain various methods to format Snowflakes into mentions.
+Los formateadores también contienen varios métodos para dar formato a los `Snowflakes` en menciones.
 
 ```js
 const { userMention, memberMention, channelMention, roleMention } = require('@discordjs/builders');
@@ -75,49 +74,50 @@ const channel = channelMention(id);
 const role = roleMention(id);
 ```
 
-## Slash command builders
+## Constructores de comandos de barra
 
-The slash command builder is a utility class to build slash commands without having to manually construct objects.
+El generador de slash commands es una clase de utilidad para crear comandos de barra sin tener que construir objetos manualmente.
 
-### Commands
+### Comandos
 
-Here's a simple slash command using the builder. You can collect your commands data and use it to register slash commands.
+Aquí hay un slash command simple usando el constructor. Puedes recopilar los datos de tus comandos y usarlos para registrar comandos de barra.
 
 ```js
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
-const command = new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!');
+const command = new SlashCommandBuilder().setName('ping').setDescription('¡Responde con Pong!');
 
-// Raw data that can be used to register a slash command
+// Datos que se pueden usar para registrar un comando de barra
 const rawData = command.toJSON();
 ```
 
-### Options
+### Opciones
 
-This is a command with a user option.
+Este es un comando con una opción de usuario.
 
 ```js {4}
 const command = new SlashCommandBuilder()
-	.setName('info')
-	.setDescription('Get info about a user!')
-	.addUserOption(option => option.setName('user').setDescription('The user'));
+	.setName('Información')
+	.setDescription('¡Obtener información sobre un usuario!')
+	.addUserOption(option => option.setName('user').setDescription('El usuario'));
 ```
 
-### Subcommands
+### Subcomandos
 
-This is a command containing two subcommands.
+Este es un comando que contiene dos subcomandos.
 
 ```js {4-12}
 const command = new SlashCommandBuilder()
-	.setName('info')
-	.setDescription('Get info about a user or a server!')
+	.setName('Información')
+	.setDescription('¡Obten información sobre un usuario o un servidor!')
 	.addSubcommand(subcommand =>
 		subcommand
-			.setName('user')
-			.setDescription('Info about a user')
-			.addUserOption(option => option.setName('target').setDescription('The user')))
+			.setName('Usuario')
+			.setDescription('Información sobre un usuario')
+			.addUserOption(option => option.setName('target').setDescription('El usuario')))
 	.addSubcommand(subcommand =>
 		subcommand
 			.setName('server')
-			.setDescription('Info about the server'));
+			.setDescription('Información sobre el servidor'));
 ```
+
