@@ -1,4 +1,4 @@
-# Constructures
+# Constructores
 
 discord.js proporciona el paquete [`@discordjs/builders`](https://github.com/discordjs/builders) que contiene una variedad de utilidades que puedes usar al escribir el código de tu bot. Para instalar este paquete, ejecuta `npm install @discordjs/builders` en tu terminal.
 
