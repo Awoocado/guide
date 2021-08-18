@@ -1,195 +1,122 @@
-# Webhooks
+# Constructures
 
-Las webhooks pueden enviar mensajes a un canal de texto sin tener que iniciar sesión como bot. También pueden buscar, editar y eliminar sus propios mensajes. Hay una variedad de métodos en discord.js para interactuar con webhooks. En esta sección, aprenderás a crear, buscar, editar y utilizar webhooks.
+discord.js proporciona el paquete [`@discordjs/builders`](https://github.com/discordjs/builders) que contiene una variedad de utilidades que puedes usar al escribir el código de tu bot. Para instalar este paquete, ejecuta `npm install @discordjs/builders` en tu terminal.
 
-## ¿Qué es un webhook?
+## Formateadores
 
-Los webhooks son una utilidad que se utilizan para enviar mensajes a canales de texto sin necesidad de un bot de Discord. Los webhooks son útiles para permitir que algo envíe mensajes sin requerir un bot de Discord. También puedes editar o eliminar directamente los mensajes que envió a través del webhook. Hay dos estructuras para hacer uso de esta funcionalidad: `Webhook` y `WebhookClient`. `WebhookClient` es una versión extendida de un `Webhook`, que te permite enviar mensajes a través de él sin necesidad de un cliente bot.
+Los formateadores son un conjunto de funciones de utilidad que formatean cadenas de entrada en el formato dado.
 
-::: tip
-Si quieres leer sobre el uso de webhooks a través de la API sin discord.js, puedes leer sobre ellos [aquí](https://discord.com/developers/docs/resources/webhook).
-:::
+### Markdown básico
 
-Detectar mensajes de webhooks
-
-Los bots reciben mensajes de webhooks en un canal de texto como de costumbre. Puedes detectar si un webhook envió el mensaje comprobando si el `Message.webhookId` no es `null`. En este ejemplo, revisamos si un webhook envió el mensaje.
-
-<!-- eslint-skip -->
-```js
-if (message.webhookId) return;
-```
-
-Si quieres obtener el objeto `Webhook` que envió el mensaje, puedes usar el método <DocsLink path="class/Message?scrollTo=fetchWebhook" type="method" />.
-
-## Obteniendo webhooks
-
-::: tip
-La búsqueda de webhooks siempre hará uso de colecciones y promesas. Si no comprendes ninguno de los conceptos, revísalos y luego vuelve a esta sección. Puedes leer sobre colecciones [aquí](/additional-info/collections.md), y  sobre promesas [aquí](/additional-info/async-await.md) y [aquí](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises).
-:::
-
-### Obteniendo todos los webhooks de un Guild
-
-Puedes obtener todos los webhoooks de un Guild usando <DocsLink path="class/Guild?scrollTo=fetchWebhooks" type="method" />. Esto devolverá una promesa que se resolverá en una colección de `Webhook`s.
-### Obteniendo webhooks de un canal
-
-Los webhooks que pertenecen a un canal se pueden recuperar usando <DocsLink path="class/TextChannel?scrollTo=fetchWebhooks" type="method" />. Esto devolverá una promesa que se resolverá en una colección de `Webhook`s. Se devolverá una colección incluso si el canal contiene un solo webhook. Si estás seguro de que el canal contiene un único webhook, puedes usar <DocsLink section="collection" path="class/Collection?scrollTo=first" type="method" /> en la colección para obtener el webhook.
-
-### Obteniendo un solo webhook
-
-#### Usando el cliente
-
-Puedes obtener un webhook específico usando su `id` con <DocsLink path="class/Client?scrollTo=fetchWebhook" type="method" />. Puedes obtener la ID del webhook mirando su enlace, el número después de `https://discord.com/api/webhooks/` es el `id`, y la parte posterior es el `token`.
-
-#### Usando el constructor WebhookClient
-
-Si no estás utilizando un cliente de bot, puedes obtener un webhook creando una nueva instancia de `WebhookClient` y pasando el` id` y el `token` al constructor. Estas credenciales no requieren que tengas una aplicación de bot, pero también ofrece información limitada en lugar de obtenerla con un cliente autorizado.
+Los formateadores proporcionan funciones para formatear cadenas en todos los diferentes estilos de Markdown admitidos por Discord.
 
 ```js
-const webhookClient = new WebhookClient({ id: 'id', token: 'token' });
+const { bold, italic, strikethrough, underscore, spoiler, quote, blockQuote } = require('@discordjs/builders');
+const string = '¡Hola!';
+
+const boldString = bold(string);
+const italicString = italic(string);
+const strikethroughString = strikethrough(string);
+const underscoreString = underscore(string);
+const spoilerString = spoiler(string);
+const quoteString = quote(string);
+const blockquoteString = blockQuote(string);
 ```
 
-Tanbién puedes pasar solo una `url`:
+### Enlaces
+
+También hay dos métodos para formatear hipervínculos. `hyperlink()` formateará la URL en un enlace enmascarado, y `hideLinkEmbed()` envolverá la URL en `<>`, evitando que se incruste.
 
 ```js
-const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/id/token' });
+const { hyperlink, hideLinkEmbed } = require('@discordjs/builders');
+const url = 'https://discord.js.org/';
+
+const link = hyperlink(url);
+const hiddenEmbed = hideLinkEmbed(url);
 ```
 
-## Creando webhooks
+### Bloques de código
 
-### Creación de webhooks a través de la configuración del servidor
-
-Puedes crear webhooks directamente a través del cliente de Discord. Ve a Configuración del servidor y verás una pestaña de "Integraciones".
-
-![Integrations tab](./images/creating-webhooks-1.png)
-
-Si ya has creado un webhook, la pestaña de webhooks se verá así; deberás hacer clic en el botón `Ver webhooks`.
-
-![Integrations tab](./images/creating-webhooks-2.png)
-
-Una vez que estés ahí, haz clic en el botón `Crear webhook` / ` Nuevo webhook`; esto creará un webhook. Desde aquí, puedes editar el canal, el nombre y el avatar. Copia el enlace, la primera parte es la identificación y la segunda es el token.
-
-![Creating a Webhook](./images/creating-webhooks-3.png)
-
-### Creando webhooks con discord.js
-
-Los webhooks se pueden crear con el método <DocsLink path="class/TextChannel?scrollTo=createWebhook" type="method" />.
+Puedes usar `inlineCode()` y `codeBlock()` para convertir una cadena de texto en un bloque de código en línea o un bloque de código regular con o sin resaltado de sintaxis.
 
 ```js
-channel.createWebhook('Some-username', {
-	avatar: 'https://i.imgur.com/AfFp7pu.png',
-})
-	.then(webhook => console.log(`Webhook creado: ${webhook}`))
-	.catch(console.error);
+const { inlineCode, codeBlock } = require('@discordjs/builders');
+const jsString = 'const value = true;';
+
+const inline = inlineCode(jsString);
+const codeblock = codeBlock(jsString);
+const highlighted = codeBlock('js', jsString);
 ```
 
-## Editar webhooks
+### Marcas de tiempo
 
-Puedes editar `Webhook`s y `WebhookClient`s para cambiar su nombre, avatar y canal usando <DocsLink path="class/Webhook?scrollTo=edit" type="method" />.
+Con `time()`, puedes formatear las marcas de tiempo y fechas de UNIX en una cadena de tiempo de Discord.
 
 ```js
-webhook.edit({
-	name: 'Some-username',
-	avatar: 'https://i.imgur.com/AfFp7pu.png',
-	channel: '222197033908436994',
-})
-	.then(webhook => console.log(`Webhook editado: ${webhook}`))
-	.catch(console.error);
+const { time } = require('@discordjs/builders');
+const date = new Date();
+
+const timeString = time(date);
+const relative = time(date, 'R');
 ```
 
-## Usar webhooks
-Los webhooks pueden enviar mensajes a canales de texto, así como recuperar, editar y eliminar los tuyos. Estos métodos son los mismos para ambos `Webhook` y `WebhookClient`.
+### Menciones
 
-### Enviando mensajes
-
-Los webhooks, como los bots, pueden enviar hasta 10 incrustaciones por mensaje. También pueden enviar archivos adjuntos y contenido normal. El método <DocsLink path="class/Webhook?scrollTo=send" type="method" /> utilizado para enviar a una webhook es muy similar al método utilizado para enviar a un canal de texto. Los webhooks también pueden elegir cómo aparecerá el nombre de usuario y el avatar cuando envíen el mensaje.
-
-Ejemplo usando un WebhookClient:
+Los formateadores también contienen varios métodos para dar formato a los `Snowflakes` en menciones.
 
 ```js
-const { MessageEmbed, WebhookClient } = require('discord.js');
-const { webhookId, webhookToken } = require('./config.json');
+const { userMention, memberMention, channelMention, roleMention } = require('@discordjs/builders');
+const id = '123456789012345678';
 
-const webhookClient = new WebhookClient({ id: webhookId, token: webhookToken });
-
-const embed = new MessageEmbed()
-	.setTitle('Titulo')
-	.setColor('#0099ff');
-
-webhookClient.send({
-	content: 'Webhook test',
-	username: 'some-username',
-	avatarURL: 'https://i.imgur.com/AfFp7pu.png',
-	embeds: [embed],
-});
+const user = userMention(id);
+const nickname = memberMention(id);
+const channel = channelMention(id);
+const role = roleMention(id);
 ```
 
-Ejemplo usando un Webhook:
+## Constructores de comandos de barra
+
+El generador de slash commands es una clase de utilidad para crear comandos de barra sin tener que construir objetos manualmente.
+
+### Comandos
+
+Aquí hay un slash command simple usando el constructor. Puedes recopilar los datos de tus comandos y usarlos para registrar comandos de barra.
 
 ```js
-const { Client, Intents, MessageEmbed } = require('discord.js');
-const { token } = require('./config.json');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const command = new SlashCommandBuilder().setName('ping').setDescription('¡Responde con Pong!');
 
-const embed = new MessageEmbed()
-	.setTitle('Titulo')
-	.setColor('#0099ff');
-
-client.once('ready', async () => {
-	const channel = client.channels.cache.get('123456789012345678');
-	try {
-		const webhooks = await channel.fetchWebhooks();
-		const webhook = webhooks.first();
-
-		await webhook.send({
-			content: 'Webhook test',
-			username: 'some-username',
-			avatarURL: 'https://i.imgur.com/AfFp7pu.png',
-			embeds: [embed],
-		});
-	} catch (error) {
-		console.error('Error al intentar enviar un mensaje: ', error);
-	}
-});
-
-client.login(token);
+// Datos que se pueden usar para registrar un comando de barra
+const rawData = command.toJSON();
 ```
 
-### Obteniendo mensajes
+### Opciones
 
-Puedes usar <DocsLink path="class/Webhook?scrollTo=fetchMessage" type="method" /> para obtener mensajes enviados previamente por el Webhook.
+Este es un comando con una opción de usuario.
 
-<!-- eslint-skip -->
-
-```js
-const message = await webhookClient.fetchMessage('123456789012345678');
+```js {4}
+const command = new SlashCommandBuilder()
+	.setName('Información')
+	.setDescription('¡Obtener información sobre un usuario!')
+	.addUserOption(option => option.setName('user').setDescription('El usuario'));
 ```
 
-### Editando mensajes
+### Subcomandos
 
-Puedes usar <DocsLink path="class/Webhook?scrollTo=editMessage" type="method" /> para editar mensajes enviados previamente por el Webhook.
+Este es un comando que contiene dos subcomandos.
 
-<!-- eslint-skip -->
-
-```js
-const message = await webhook.editMessage('123456789012345678', {
-	content: 'Edited!',
-	username: 'some-username',
-	avatarURL: 'https://i.imgur.com/AfFp7pu.png',
-	embeds: [embed],
-});
+```js {4-12}
+const command = new SlashCommandBuilder()
+	.setName('Información')
+	.setDescription('¡Obten información sobre un usuario o un servidor!')
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('Usuario')
+			.setDescription('Información sobre un usuario')
+			.addUserOption(option => option.setName('target').setDescription('El usuario')))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('server')
+			.setDescription('Información sobre el servidor'));
 ```
-
-### Eliminando mensajes
-
-Puedes usar <DocsLink path="class/Webhook?scrollTo=deleteMessage" type="method" /> para eliminar mensajes enviados previamente por el Webhook.
-
-<!-- eslint-skip -->
-
-```js
-await webhookClient.deleteMessage('123456789012345678');
-```
-
-## Resultado del código
-
-<ResultingCode/>
