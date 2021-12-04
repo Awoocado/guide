@@ -1,14 +1,14 @@
-# Getting started with OAuth2
+# ¡Comenzando con el "OAuth2"!
 
-OAuth2 enables application developers to build applications that utilize authentication and data from the Discord API. Developers can use this to create things such as web dashboards to display user info, fetch linked third-party accounts like Twitch or Steam, access users' guild information without actually being in the guild, and much more. OAuth2 can significantly extend the functionality of your bot if used correctly.
+OAuth2 permite a los desarrolladores de aplicaciones crear aplicaciones que utilizan autenticación y datos de la API de Discord. Los desarrolladores pueden usar esto para crear cosas como paneles web para mostrar información del usuario, obtener cuentas de terceros vinculadas como Twitch o Steam, acceder a la información del gremio de los usuarios sin estar realmente en el gremio, y mucho más. OAuth2 puede ampliar significativamente la funcionalidad de su bot si se usa correctamente.
 
-## A quick example
+## Hagamos un rápido ejemplo
 
-### Setting up a basic web server
+### Formando un Web Server (WS) básico
 
-Most of the time, websites use OAuth2 to get information about their users from an external service. In this example, we will use [`express`](https://expressjs.com/) to create a web server to use a user's Discord information to greet them. Start by creating three files: `config.json`, `index.js`, and `index.html`. 
+La mayoría de las veces, los sitios web utilizan OAuth2 para obtener información sobre sus usuarios de un servicio externo. En este ejemplo, usaremos [`express`](https://expressjs.com/) para crear dicho server para usar la información de un usuario en discord. Comienza creando 3 archivos: `config.json`, `index.js`, y `index.html`. 
 
-`config.json` will be used to store the client ID, client secret, and server port.
+`config.json` se usará para guardar variables, como el ClientID, port, entre otros...
 
 ```json
 {
@@ -18,7 +18,7 @@ Most of the time, websites use OAuth2 to get information about their users from 
 }
 ```
 
-`index.js` will be used to start the server and handle requests. When someone visits the index page (`/`), an HTML file will be sent in response.
+`index.js` se usará para encender el servidor y recibir "requests". Cuando alguien visita la página index (`/`), un archivo HTML será enviado como respuesta.
 
 ```js
 const express = require('express');
@@ -26,14 +26,14 @@ const { port } = require('./config.json');
 
 const app = express();
 
-app.get('/', (request, response) => {
-	return response.sendFile('index.html', { root: '.' });
+app.get('/', (req, res) => { //req = response && res = response.
+	return res.sendFile('index.html', { root: '.' });
 });
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
 ```
 
-`index.html` will be used to display the user interface and OAuth data once logged in.
+`index.html` se usará para mostrar la información cargada.
 
 ```html
 <!DOCTYPE html>
@@ -43,7 +43,7 @@ app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
 </head>
 <body>
 	<div id="info">
-		Hoi!
+		¡Hola!
 	</div>
 </body>
 </html>
