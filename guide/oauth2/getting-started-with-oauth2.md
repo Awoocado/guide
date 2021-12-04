@@ -69,13 +69,13 @@ Una vez que añadas tu URL de redirección, querrás generar una OAuth2 URL. Baj
 
 ![Generate an OAuth2 URL](./images/generate-url.png)
 
-The `identify` scope will allow your application to get basic user information from Discord. You can find a list of all scopes [here](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
+El scope `identify` dará permiso a tu aplicación para obtener la información que necesitas de Discord. ¿Quieres ver todos los SCOPES? [Haz click aquí](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
 
-### Implicit grant flow
+### Grant flow implícito
 
-You have your website, and you have a URL. Now you need to use those two things to get an access token. For basic applications like [SPAs](https://en.wikipedia.org/wiki/Single-page_application), getting an access token directly is enough. You can do so by changing the `response_type` in the URL to `token`. However, this means you will not get a refresh token, which means the user will have to explicitly re-authorize when this access token has expired.
+Tienes tu sitio web y tienes una URL. Ahora necesita usar esas dos cosas para obtener un token de acceso. Para aplicaciones básicas como [SPA](https://en.wikipedia.org/wiki/Single-page_application), obtener un token de acceso directamente es suficiente. Puede hacerlo cambiando el `response_type` en la URL a` token`. Sin embargo, esto significa que no obtendrá un token de actualización, lo que significa que el usuario tendrá que volver a autorizar explícitamente cuando este token de acceso haya expirado.
 
-After you change the `response_type`, you can test the URL right away. Visiting it in your browser, you will be directed to a page that looks like this:
+Después de cambiar el `response_type`, puede probar la URL de inmediato. Al visitarlo en su navegador, se lo dirigirá a una página que se ve así:
 
 ![Authorization Page](./images/authorize-app-page.png)
 
@@ -87,7 +87,7 @@ Modify `index.html` to add your OAuth2 URL and to take advantage of the access t
 <div id="info">
 	Hoi!
 </div>
-<a id="login" style="display: none;" href="your-oauth2-URL-here">Identify Yourself</a>
+<a id="login" style="display: none;" href="your-oauth2-URL-here">Identifícate</a>
 <script>
 	window.onload = () => {
 		const fragment = new URLSearchParams(window.location.hash.slice(1));
@@ -103,8 +103,8 @@ Modify `index.html` to add your OAuth2 URL and to take advantage of the access t
 			},
 		})
 			.then(result => result.json())
-			.then(response => {
-				const { username, discriminator } = response;
+			.then(res => {
+				const { username, discriminator } = res;
 				document.getElementById('info').innerText += ` ${username}#${discriminator}`;
 			})
 			.catch(console.error);
@@ -112,7 +112,7 @@ Modify `index.html` to add your OAuth2 URL and to take advantage of the access t
 </script>
 ```
 
-Here you grab the access token and type from the URL if it's there and use it to get info on the user, which is then used to greet them. The response you get from the [`/api/users/@me` endpoint](https://discord.com/developers/docs/resources/user#get-current-user) is a [user object](https://discord.com/developers/docs/resources/user#user-object) and should look something like this:
+Aquí toma el token de acceso y escribe desde la URL si está allí y lo usa para obtener información sobre el usuario, que luego se usa para saludarlo. La respuesta que obtienes del endpoint [`/api/users/@me`](https://discord.com/developers/docs/resources/user#get-current-user) es un [user object](https://discord.com/developers/docs/resources/user#user-object) y debería verse algo así:
 
 ```json
 {
