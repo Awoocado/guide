@@ -49,23 +49,23 @@ app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
 </html>
 ```
 
-After running `npm i express`, you can start your server with `node index.js`. Once started, connect to `http://localhost:53134`, and you should see "Hoi!".
+Después de ejecutar `npm i express`, puedes arrancar tu servidor con el comando `node index.js`. Una vez hecho, conéctate a el link `http://localhost:53134`, y verás "¡Hola!".
 
 ::: tip
-Although we're using express, there are many other alternatives to handle a web server, such as: [fastify](https://www.fastify.io/), [koa](https://koajs.com/), and the [native Node.js http module](https://nodejs.org/api/http.html).
+Aunque usamos ahora ExpressJs, hay muchas otras alternativas de ejecutar un Web Server, dichas son: [Fastify](https://www.fastify.io/), [Koa](https://koajs.com/), y el [native Node.js http module](https://nodejs.org/api/http.html).
 :::
 
-### Getting an OAuth2 URL
+### Obtener una URL OAuth2
 
-Now that you have a web server up and running, it's time to get some information from Discord. Open [your Discord applications](https://discord.com/developers/applications/), create or select an application, and head over to the "OAuth2" page.
+Bien, ahora que tienes tu servidor "vivito y coleando", es hora de obtener una rica información de Discord. Abre [tus aplicaciones](https://discord.com/developers/applications/), crea o selecciona una aplicación y dirígete a la página "OAuth2".
 
-![OAuth2 application page](./images/oauth2-app-page.png)
+![Página OAuth2](./images/oauth2-app-page.png)
 
-Take note of the `client id` and `client secret` fields. Copy these values into your `config.json` file; you'll need them later. For now, add a redirect URL to `http://localhost:53134` like so:
+Toma nota sobre el `client id` y el `client secret`. Copia ambos valores y pégalos en tu `config.json`; son necesarios para luego. Por ahora, añade una URL de redirección a `http://localhost:53134`:
 
-![Adding Redirects](./images/add-redirects.png)
+![Añadiendo redirecciones](./images/add-redirects.png)
 
-Once you've added your redirect URL, you will want to generate an OAuth2 URL. Lower down on the page, you can conveniently find an OAuth2 URL Generator provided by Discord. Use this to create a URL for yourself with the `identify` scope.
+Una vez que añadas tu URL de redirección, querrás generar una OAuth2 URL. Baja un poquito en la misma página y... ¡Oh, ahí está! El generador de OAuth2 URLs proveido por Discord. Usa esta herramienta para generar una URL, asegurate de marcar la casilla `identify`, esta es **MUY** necesaria.
 
 ![Generate an OAuth2 URL](./images/generate-url.png)
 
