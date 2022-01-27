@@ -157,7 +157,7 @@ window.onload = () => {
 };
 ```
 
-Cuando visitas una URL OAuth2 con un parámetro `state` añadiendo a ella, y luego haces click en `Authorize`, te darás cuenta de que después de ser redirigido, la URL también tendrá el parámetro `state` añadido, el cual deberás de comprobar con el `state` almacenado. Puedes modificar el script en tu archivo `index.html` para que haga esto.
+Cuando visitas una URL OAuth2 con un parámetro `state` añadiendo a ella, y luego haces click en `Autorizar`, te darás cuenta de que después de ser redirigido, la URL también tendrá el parámetro `state` añadido, el cual deberás de comprobar con el `state` almacenado. Puedes modificar el script en tu archivo `index.html` para que haga esto.
 
 ```js {2,8-10}
 const fragmento = new URLSearchParams(window.location.hash.slice(1));
@@ -238,7 +238,7 @@ app.get('/', async ({ query }, response) => {
 El `Content-Type` de la URL del token debe ser `application/x-www-form-urlencoded`, por lo que se utiliza `URLSearchParams`.
 :::
 
-Ahora, intenta visitar tu uRL OAuth2 y darle a `Authorize`. Una vez redirigido, deberías de ver una [respuesta de token de acceso](https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response) en tu consola.
+Ahora, intenta visitar tu uRL OAuth2 y darle a `Autorizar`. Una vez redirigido, deberías de ver una [respuesta de token de acceso](https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response) en tu consola.
 
 ```json
 {
