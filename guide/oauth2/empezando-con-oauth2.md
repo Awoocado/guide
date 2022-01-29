@@ -181,7 +181,7 @@ No renuncies a la seguridad por un poco de comodidad.
 
 Lo que hiciste en el ejemplo rápido fue pasar por el flujo `implicit grant`, que pasó el token de acceso directamente al navegador del usuario. Este flujo es genial y simple, pero no consigues refrescar el token sin el usuario, y es menos seguro que pasar por el flujo de `authorization code grant`. Este flujo implica la recepción de un código de acceso, que su servidor intercambia por un token de acceso. Observe que de esta manera, el token de acceso nunca llega al usuario en todo el proceso.
 
-A diferencia del [flujo de concesión implícita](/oauth2/#implicit-grant-flow), necesitas una URL OAuth2 donde el `response_type` sea `code`. Después de cambiar el `response_type`, intenta visitar el enlace y autorizar tu aplicación. Deberías notar que en lugar de un hash, la URL de redirección tiene ahora un único parámetro de consulta añadido, es decir, `?code=ACCESS_CODE`. Modifica tu archivo `index.js` para acceder al parámetro desde la URL si existe. En express, puedes utilizar la propiedad `query` del parámetro `request`.
+A diferencia del [flujo de concesión implícita](/oauth2/#conceder-flujo-implicito), necesitas una URL OAuth2 donde el `response_type` sea `code`. Después de cambiar el `response_type`, intenta visitar el enlace y autorizar tu aplicación. Deberías notar que en lugar de un hash, la URL de redirección tiene ahora un único parámetro de consulta añadido, es decir, `?code=ACCESS_CODE`. Modifica tu archivo `index.js` para acceder al parámetro desde la URL si existe. En express, puedes utilizar la propiedad `query` del parámetro `request`.
 
 ```js {2}
 app.get('/', (request, response) => {
