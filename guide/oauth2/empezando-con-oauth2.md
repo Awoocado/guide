@@ -72,7 +72,7 @@ Una vez hayas añadido la URL de redirección, tendrás que generar una URL Oaut
 
 El campo `identify` permitirá que tu aplicación pueda obtener información básica del usuario de Discord. Puedes encontrar una lista de todos los campos [aquí](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
 
-### Flujo implícito de subvenciones
+### Conceder flujo implicito
 
 Ya tienes el sitio web, y tienes la URL. Ahora necesitas usar estas dos cosas para obtener un token de acceso. Para applicaciones básicas como [SPAs](https://es.wikipedia.org/wiki/Single-page_application), obtener un token de acceso de manera directa es suficiente. Puedes hacerlo cambiando el `response_type` de la URL OAuth2 por `token`. Sin embargo, esto significa que no obtendrás un token de actualización, lo que significa que el usuario tendrá re-autorizarse explícitamente cuando el token de acceso haya expirado.
 
