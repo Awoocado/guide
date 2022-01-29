@@ -265,7 +265,7 @@ const resultado = await fetch('https://discord.com/api/users/@me', {
 console.log(await resultado.json());
 ```
 
-::: consejo
+::: tip
 Para mantener la seguridad sana, almacena el token de acceso en el lado del servidor pero asócielo a una ID de sesión (cookies) que el servidor genere para el usuario.
 :::
 
