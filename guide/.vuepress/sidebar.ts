@@ -124,7 +124,7 @@ export default {
 		{
 			text: 'OAuth2',
 			children: [
-				'/oauth2/getting-started-with-oauth2.md',
+				'/oauth2/empezando-con-oauth2.md',
 			],
 		},
 		{
