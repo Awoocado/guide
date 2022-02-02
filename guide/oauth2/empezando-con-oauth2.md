@@ -52,7 +52,7 @@ app.listen(port, () => console.log(`Servidor escuchando a http://localhost:${por
 
 Después de ejecutar `npm i express`, podrás iniciar tu servidor web con `node index.js`. Una vez se inicie, abre `http://localhost:53134` y deberías de ver un "¡Holi!".
 
-::: consejo
+::: tip
 Aunque en este ejemplo estamos usando express, hay muchas otras alternativas para manejar un servidor web, tales como: [fastify](https://www.fastify.io/), [koa](https://koajs.com/), y el [módulo http nativo de Node.js](https://nodejs.org/api/http.html).
 :::
 
@@ -173,7 +173,7 @@ if (localStorage.getItem('oauth-state') !== atob(decodeURIComponent(state))) {
 }
 ```
 
-::: consejo
+::: tip
 No renuncies a la seguridad por un poco de comodidad.
 :::
 
