@@ -257,7 +257,7 @@ Si quieres construir nuevos datos de incrustaciones a una plantilla de una incru
 - Los marcadores de horas en el pie de la incrustación se ajustan automáticamente a las distintas zonas horarias dependiendo del dispositivo del usuario.
 - Menciones de cualquier tipo sólo se mostrarán correctamente en campos con valores y descripciones.
 - Las menciones dentro de incrustaciones no notificarán.
-- Las incrustaciones permiten links enmascarados (e.j. `[Guía](https://guia.palta.ml/ 'subtítulo opcional')`), pero sólo en descripciones y campos de valores.
+- Las incrustaciones permiten links enmascarados (e.j. `[Guía](https://guia.aguacate.ml/ 'subtítulo opcional')`), pero sólo en descripciones y campos de valores.
 
 ## Límites de una incrustación
 

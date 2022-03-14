@@ -20,9 +20,9 @@ const config = defineUserConfig<DefaultThemeOptions, ViteBundlerOptions>({
 		['meta', { property: 'og:title', content: 'Guía de discord.js' }],
 		['meta', { property: 'og:description', content: 'La guía oficial de discord.js traducida a español.' }],
 		['meta', { property: 'og:type', content: 'website' }],
-		['meta', { property: 'og:url', content: 'https://guia.palta.ml/' }],
+		['meta', { property: 'og:url', content: 'https://guia.aguacate.ml/' }],
 		['meta', { property: 'og:locale', content: 'es_XL' }],
-		['meta', { property: 'og:image', content: 'https://guia.palta.ml/metaimg.png' }],
+		['meta', { property: 'og:image', content: 'https://guia.aguacate.ml/metaimg.png' }],
 	],
 	theme: path.join(__dirname, 'theme', 'index.ts'),
 	themeConfig: {
