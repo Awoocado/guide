@@ -1,12 +1,12 @@
-# Extended changes
+# Cambios extendidos
 
 ::: tip
-This page is a follow-up and bases its code on [the previous page](/sharding/informacion-adicional.md), which assumes knowledge of arguments and passing functions.
+Esta página es una continuación y basa su código en [la pagina anterior](/sharding/informacion-adicional.md), que asume conocimientos de argumentos y funciones de paso. 
 :::
 
-## Sending messages across shards
+## Enviar mensajes a través de fragmentos
 
-Let's start with the basic usage of shards. At some point in bot development, you might have wanted to send a message to another channel, which may or may not necessarily be on the same guild, which means it may or may not be on the same shard. To achieve this, you will need to go back to your friend `.broadcastEval()` and try every shard for the desired channel. Suppose you have the following code in your `interactionCreate` event:
+Comencemos con el uso básico de fragmentos. En algún momento del desarrollo del bot, es posible que haya querido enviar un mensaje a otro canal, que puede estar o no necesariamente en el mismo gremio, lo que significa que puede estar o no en el mismo fragmento. Para lograr esto, deberá volver a su amigo `.broadcastEval()` y probar cada fragmento para el canal deseado. Suponga que tiene el siguiente código en su evento `interactionCreate`:
 
 ```js {3-11}
 client.on('interactionCreate', interaction => {
@@ -15,18 +15,18 @@ client.on('interactionCreate', interaction => {
 		const id = interaction.options.getString('destination');
 		const channel = client.channels.cache.get(id);
 
-		if (!channel) return interaction.reply('I could not find such a channel.');
+		if (!channel) return interaction.reply('No pude encontrar el canal.');
 
 		channel.send('Hello!');
-		return interaction.reply(`I have sent a message to channel: \`${id}\`!`);
+		return interaction.reply(`He enviado un mensaje a: \`${id}\`!`);
 	}
 });
 ```
 
-This will never work for a channel that lies on another shard. So, let's remedy this.
+Esto nunca funcionará para un canal que se encuentra en otro fragmento. Entonces, vamos a remediar esto.
 
 ::: tip
-In discord.js v13, <DocsLink path="class/ShardClientUtil?scrollTo=ids">`Client#shard`</DocsLink> can hold multiple ids. If you use the default sharding manager, the `.ids` array will only have one entry.
+En discord.js v13, <DocsLink path="class/ShardClientUtil?scrollTo=ids">`Client#shard`</DocsLink> puede contener múltiples identificaciones. Si usa el administrador de fragmentación predeterminado, la matriz `.ids` solo tendrá una entrada.
 :::
 
 ```js {4-13}
@@ -35,7 +35,7 @@ if (commandName === 'send') {
 	return client.shard.broadcastEval(async (c, { channelId }) => {
 		const channel = c.channels.cache.get(channelId);
 		if (channel) {
-			await channel.send(`This is a message from shard ${c.shard.ids.join(',')}!`);
+			await channel.send(`Este es un mensaje de fragmento ${c.shard.ids.join(',')}!`);
 			return true;
 		}
 		return false;
@@ -44,7 +44,7 @@ if (commandName === 'send') {
 }
 ```
 
-If all is well, you should notice an output like `[false, true, false, false]`. If it is not clear why `true` and `false` are hanging around, the last expression of the eval statement will be returned. You will want this if you want any feedback from the results. Now that you have observed said results, you can adjust the command to give yourself proper feedback, like so:
+Si todo está bien, debería notar una salida como `[falso, verdadero, falso, falso]`. Si no está claro por qué `verdadero` y `falso` están dando vueltas, se devolverá la última expresión de la declaración eval. Querrás esto si quieres algún comentario de los resultados. Ahora que ha observado dichos resultados, puede ajustar el comando para obtener la retroalimentación adecuada, así:
 
 ```js {4-10}
 return client.shard.broadcastEval(c => {
@@ -53,17 +53,17 @@ return client.shard.broadcastEval(c => {
 	.then(sentArray => {
 		// Search for a non falsy value before providing feedback
 		if (!sentArray.includes(true)) {
-			return message.reply('I could not find such a channel.');
+			return message.reply('No pude encontrar el canal.');
 		}
-		return message.reply(`I have sent a message to channel: \`${id}\`!`);
+		return message.reply(`He enviado un mensaje a: \`${id}\`!`);
 	});
 ```
 
-And that's it for this section! You have successfully communicated across all of your shards.
+¡Y eso es todo por esta sección! Te has comunicado con éxito en todos tus fragmentos.
 
-## Using functions continued
+## Uso de funciones continuación
 
-If you remember, there was a brief mention of passing functions through `.broadcastEval()`, but no super clear description of exactly how to go about it. Well, fret not, for this section will cover it! Suppose you have the following code in your `interactionCreate` event:
+Si recuerdas, hubo una breve mención de pasar funciones a través de `.broadcastEval()`, pero no una descripción muy clara de cómo hacerlo exactamente. Bueno, no se preocupe, ¡esta sección lo cubrirá! Suponga que tiene el siguiente código en su evento `interactionCreate`:
 
 ```js {3-8}
 client.on('interactionCreate', message => {
@@ -72,14 +72,14 @@ client.on('interactionCreate', message => {
 		const emojiId = interaction.options.getString('emoji');
 		const emoji = client.emojis.cache.get(emojiId);
 
-		return message.reply(`I have found an emoji ${emoji}!`);
+		return message.reply(`He encontrado un emoji: ${emoji}!`);
 	}
 });
 ```
 
-The aforementioned code will essentially search through `client.emojis.cache` for the provided id, which will be given provided by the `emoji` option. However, with sharding, you might notice it doesn't search through all the client's emojis. As mentioned in an earlier section of this guide, the different shards partition the client and its cache. Emojis derive from guilds meaning each shard will have the emojis from all guilds for that shard. The solution is to use `.broadcastEval()` to search all the shards for the desired emoji.
+El código antes mencionado esencialmente buscará a través de `client.emojis.cache` la identificación proporcionada, que será proporcionada por la opción `emoji`. Sin embargo, con la fragmentación, es posible que observe que no busca en todos los emojis del cliente. Como se mencionó en una sección anterior de esta guía, los diferentes fragmentos dividen el cliente y su caché. Los emojis se derivan de los gremios, lo que significa que cada fragmento tendrá los emojis de todos los gremios para ese fragmento. La solución es usar `.broadcastEval()` para buscar en todos los fragmentos el emoji deseado.
 
-Let's start with a basic function, which will try to grab an emoji from the current client and return it.
+Comencemos con una función básica, que intentará tomar un emoji del cliente actual y devolverlo.
 
 ```js
 function findEmoji(c, { nameOrId }) {
@@ -87,7 +87,7 @@ function findEmoji(c, { nameOrId }) {
 }
 ```
 
-Next, you need to call the function in your command properly. If you recall from [this section](/sharding/informacion-adicional.md#eval-arguments), it is shown there how to pass a function and arguments correctly.
+A continuación, debe llamar a la función en su comando correctamente. Si recuerdas [esta selección](/sharding/informacion-adicional.md#eval-arguments),se muestra allí cómo pasar una función y argumentos correctamente.
 
 ```js {4-7}
 client.on('interactionCreate', interaction => {
@@ -101,8 +101,7 @@ client.on('interactionCreate', interaction => {
 });
 ```
 
-Now, run this code, and you will surely get a result that looks like the following:
-
+Ahora, ejecute este código y seguramente obtendrá un resultado similar al siguiente:
 <!-- eslint-skip  -->
 
 ```js
@@ -127,32 +126,33 @@ Now, run this code, and you will surely get a result that looks like the followi
 ]
 ```
 
-While this result isn't *necessarily* bad or incorrect, it's simply a raw object that got `JSON.parse()`'d and `JSON.stringify()`'d over, so all of the circular references are gone. More importantly, The object is no longer a true `GuildEmoji` object as provided by discord.js. *This means none of the convenience methods usually provided to you are available.* If this is a problem for you, you will want to handle the item *inside* the `broadcastEval`. Conveniently, the `findEmoji` function will be run, so you should execute your relevant methods there, before the object leaves the context.
+Si bien este resultado no es *necesariamente* malo o incorrecto, es simplemente un objeto sin procesar que recibió 'JSON.parse()' y 'JSON.stringify()', por lo que todas las referencias circulares desaparecieron. Más importante aún, el objeto ya no es un verdadero objeto `GuildEmoji` como lo proporciona discord.js. *Esto significa que ninguno de los métodos convenientes que normalmente se le brindan está disponible.* Si esto es un problema para usted, querrá manejar el elemento *dentro* de `broadcastEval`. Convenientemente, se ejecutará la función `findEmoji`, por lo que debe ejecutar sus métodos relevantes allí, antes de que el objeto abandone el contexto.
 
 ```js {2-3,5-6}
 function findEmoji(c, { nameOrId }) {
 	const emoji = c.emojis.cache.get(nameOrId) || c.emojis.cache.find(e => e.name.toLowerCase() === nameOrId.toLowerCase());
 	if (!emoji) return null;
-	// If you wanted to delete the emoji with discord.js, this is where you would do it. Otherwise, don't include this code.
+	// Si quisieras eliminar el emoji con discord.js, aquí es donde lo harías.
+	De lo contrario, no incluya este código.
 	emoji.delete();
 	return emoji;
 }
 ```
 
-With all that said and done, usually you'll want to display the result, so here is how you can go about doing that:
+Con todo lo dicho y hecho, por lo general querrás mostrar el resultado, así que así es como puedes hacerlo:
 
 ```js {2-7}
 return client.shard.broadcastEval(findEmoji, { context: { nameOrId: emojiNameOrId } })
 	.then(emojiArray => {
-		// Locate a non falsy result, which will be the emoji in question
+		// Localiza un resultado no falso, que será el emoji en cuestión
 		const foundEmoji = emojiArray.find(emoji => emoji);
-		if (!foundEmoji) return message.reply('I could not find such an emoji.');
+		if (!foundEmoji) return message.reply('no pude encontrar ese emoji.');
 		return message.reply(`I have found the ${foundEmoji.animated ? `<${foundEmoji.identifier}>` : `<:${foundEmoji.identifier}> emoji!`}!`);
 	});
 ```
 
-And that's all! The emoji should have pretty-printed in a message, as you'd expect.
+¡Y eso es todo! El emoji debería estar bastante impreso en un mensaje, como era de esperar.
 
-## Resulting code
+## Código resultante
 
 <ResultingCode />
